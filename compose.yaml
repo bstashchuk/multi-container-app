@@ -4,8 +4,8 @@
 
 # Here the instructions define your application as two services called "todo-app" and “todo-database”
 # The service “todo-app” is built from the Dockerfile in the /app directory,
-# and the service “todo-database” uses the official MongoDB image 
-# from Docker Hub - https://hub.docker.com/_/mongo. 
+# and the service “todo-database” uses the official MongoDB image
+# from Docker Hub - https://hub.docker.com/_/mongo.
 # You can add other services your application may depend on here.
 
 services:
@@ -15,10 +15,9 @@ services:
     depends_on:
       - todo-database
     environment:
-      NODE_ENV: production
+      NODE_ENV: develop
     ports:
       - 3000:3000
-      - 35729:35729
     develop:
       watch:
         - path: ./app/package.json
@@ -29,10 +28,22 @@ services:
 
   todo-database:
     image: mongo:6
-    #volumes: 
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    #volumes:
     #  - database:/data/db
-    ports:
-      - 27017:27017
 
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_URL: mongodb://root:password@todo-database:27017/
+      ME_CONFIG_BASICAUTH: false
 #volumes:
-  #database:
+#database:

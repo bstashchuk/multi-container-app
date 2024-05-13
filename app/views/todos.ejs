@@ -9,6 +9,18 @@
     <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+    function deleteTodo(todoId) {
+        fetch(`/${todoId}`, { method: 'DELETE' })
+        .then(response => {
+            if (response.redirected) window.location.href = response.url;
+        })
+        .catch(error => {
+            alert('Failed to delete task. Please try again later.');
+        });
+    }
+    </script>
+        
 </head>
 
 <body>
@@ -54,11 +66,7 @@
                                                                 </small></p>
                                                     </div>
                                                 </div>
-                                                <a href="javascript:;" onclick="this.children[0].submit()"
-                                                    class="text-danger">
-                                                    <form method="POST" action="/todo/destroy">
-                                                        <input type="hidden" name="_key" value="<%= todo._id %>" />
-                                                    </form>
+                                                <a href="javascript:;" onclick="deleteTodo('<%= todo._id %>')" class="text-danger">
                                                     <i class="fa fa-trash-o"></i>
                                                 </a>
                                             </div>
